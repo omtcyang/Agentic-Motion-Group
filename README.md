@@ -1,3 +1,3 @@
-# E2A-Team
+# Agentic Locomotion Group
 
-Come to E2A team [HOMEPAGE](https://e2a.team) for trying our projects ONLINE!
+Come to Agentic Locomotion Group [HOMEPAGE](https://e2a.team) for trying our projects ONLINE!
