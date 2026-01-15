@@ -72,4 +72,90 @@ document.addEventListener('DOMContentLoaded', function() {
     // 页面加载时初始化一次
     resetCompare();
   });
+
+  // 添加视频播放功能
+    const videoContainers = document.querySelectorAll('.video-container');
+    
+    videoContainers.forEach(container => {
+        const video = container.querySelector('video');
+        const placeholder = container.querySelector('.video-placeholder');
+        
+        if (video && placeholder) {
+            // 点击占位图时播放视频
+            placeholder.addEventListener('click', function() {
+                // 隐藏占位图
+                placeholder.style.display = 'none';
+                // 播放视频
+                video.play();
+                
+                // 添加播放控制
+                video.addEventListener('click', function() {
+                    if (video.paused) {
+                        video.play();
+                    } else {
+                        video.pause();
+                        // 显示暂停时的控制界面
+                        showVideoControls(video, placeholder);
+                    }
+                });
+                
+                // 视频结束时显示占位图
+                video.addEventListener('ended', function() {
+                    placeholder.style.display = 'flex';
+                });
+            });
+            
+            // 显示视频控制界面（暂停时）
+            function showVideoControls(videoEl, placeholderEl) {
+                const controls = document.createElement('div');
+                controls.className = 'video-controls';
+                controls.innerHTML = `
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                    </div>
+                `;
+                controls.style.cssText = `
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgb(0, 0, 0, 0.1);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    color: white;
+                    z-index: 10;
+                    cursor: pointer;
+                `;
+                
+                controls.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    videoEl.play();
+                    controls.remove();
+                });
+                
+                container.appendChild(controls);
+            }
+        }
+    });
+
+  // 点击视频外部区域暂停视频并显示占位图
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.video-container')) {
+            videoContainers.forEach(container => {
+                const video = container.querySelector('video');
+                const placeholder = container.querySelector('.video-placeholder');
+                const controls = container.querySelector('.video-controls');
+                
+                if (video && !video.paused) {
+                    video.pause();
+                    if (controls) controls.remove();
+                    if (placeholder) placeholder.style.display = 'flex';
+                }
+            });
+        }
+    });
+
 });
